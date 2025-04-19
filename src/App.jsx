@@ -3,13 +3,20 @@ import "./App.css";
 import { v4 as uuidv4 } from 'uuid';
 
 function App() {
-  let [todo, setTodo] = useState(["Sample"]);
+  let [todo, setTodo] = useState([{task:"Sample",id :uuidv4()}]);
   let [newTodo, setNew] = useState("");
 
   let addNewTask = () => {
-      setTodo([...todo, newTodo]);
+      setTodo((prevTodos)=>{
+        return [...prevTodos, {task:newTodo,id:uuidv4()}]
+      });
       setNew("")
   };
+
+  let deleteTodo=(id)=>{
+    setTodo(todo.filter((item)=>item.id!=id));
+
+  }
 
   let updateTodoValue = (event) => {
     setNew(event.target.value);
@@ -29,9 +36,15 @@ function App() {
       <hr />
       <h4>Tasks Todo</h4>
       <ul>
-        {todo.map((task, index) => (
-          <li key={index}>{task}</li>
-        ))}
+        {todo.map((todos)=>(
+          <li key={todos.id}> 
+          <span>{todos.task}</span> 
+          &nbsp;&nbsp;
+          <button onClick={()=>deleteTodo(todos.id)}>Delete</button>
+          </li>
+        )
+
+        )}
       </ul>
     </div>
   );
